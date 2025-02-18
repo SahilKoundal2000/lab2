@@ -1,4 +1,4 @@
-name: CI/CD Pipeline for Lab 2
+name: CI/CD Pipeline for COSC 1209
 
 on:
   push:
@@ -10,8 +10,8 @@ on:
 
 jobs:
 
-  # 🏗️ Job 1: Print Message (runs on multiple OS)
-  simple-message:
+  # 🏗️ Job 1: Print a Message (Runs on Windows, Linux, macOS)
+  echo-message:
     name: Echo Message on Multiple OS
     runs-on: ${{ matrix.os }}
     strategy:
@@ -26,17 +26,20 @@ jobs:
     name: Build Java with Gradle
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Set up JDK 17
+      - name: Set up Java 17 (Compatible with Spring Boot)
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Grant execute permission for Gradle
+      - name: Grant Execute Permission for Gradle Wrapper
         run: chmod +x gradlew
 
-      - name: Build the Java project with Gradle
-        run: ./gradlew build
+      - name: Upgrade Gradle Wrapper to Latest Stable Version
+        run: ./gradlew wrapper --gradle-version 8.0 --distribution-type bin
+
+      - name: Build Java Project with Gradle
+        run: ./gradlew build --stacktrace
